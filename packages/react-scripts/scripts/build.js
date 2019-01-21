@@ -80,7 +80,7 @@ checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
     // First, read the current file sizes in build directory.
     // This lets us display how much they changed later.
-    return measureFileSizesBeforeBuild(paths.appBuild);
+    return !rewriteEnv && measureFileSizesBeforeBuild(paths.appBuild);
   })
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
@@ -111,13 +111,15 @@ checkBrowsers(paths.appPath, isInteractive)
       }
 
       console.log('File sizes after gzip:\n');
-      printFileSizesAfterBuild(
-        stats,
-        previousFileSizes,
-        paths.appBuild,
-        WARN_AFTER_BUNDLE_GZIP_SIZE,
-        WARN_AFTER_CHUNK_GZIP_SIZE
-      );
+      if (!rewriteEnv) {
+        printFileSizesAfterBuild(
+          stats,
+          previousFileSizes,
+          paths.appBuild,
+          WARN_AFTER_BUNDLE_GZIP_SIZE,
+          WARN_AFTER_CHUNK_GZIP_SIZE
+        );
+      }
       console.log();
 
       const appPackage = require(paths.appPackageJson);
@@ -147,7 +149,11 @@ checkBrowsers(paths.appPath, isInteractive)
 
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
-  console.log('Creating an optimized production build...');
+  console.log(
+    rewriteEnv
+      ? 'Creating an instrumentation build...'
+      : 'Creating an optimized production build...'
+  );
 
   let compiler = webpack(config);
   return new Promise((resolve, reject) => {
