@@ -364,6 +364,7 @@ module.exports = function(webpackEnv) {
                     ? 'production'
                     : isEnvDevelopment && 'development',
                   [
+                    'babel-plugin-istanbul',
                     'babel-plugin-named-asset-import',
                     'babel-preset-react-app',
                     'react-dev-utils',
@@ -371,18 +372,32 @@ module.exports = function(webpackEnv) {
                   ]
                 ),
                 // @remove-on-eject-end
-                plugins: [
-                  [
-                    require.resolve('babel-plugin-named-asset-import'),
-                    {
-                      loaderMap: {
-                        svg: {
-                          ReactComponent: '@svgr/webpack?-svgo![path]',
+                plugins: isEnvProduction
+                  ? [
+                      [
+                        require.resolve('babel-plugin-named-asset-import'),
+                        {
+                          loaderMap: {
+                            svg: {
+                              ReactComponent: '@svgr/webpack?-svgo![path]',
+                            },
+                          },
                         },
-                      },
-                    },
-                  ],
-                ],
+                      ],
+                    ]
+                  : [
+                      [
+                        require.resolve('babel-plugin-named-asset-import'),
+                        require.resolve('babel-plugin-istanbul'),
+                        {
+                          loaderMap: {
+                            svg: {
+                              ReactComponent: '@svgr/webpack?-svgo![path]',
+                            },
+                          },
+                        },
+                      ],
+                    ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
@@ -415,6 +430,7 @@ module.exports = function(webpackEnv) {
                     ? 'production'
                     : isEnvDevelopment && 'development',
                   [
+                    'babel-plugin-istanbul',
                     'babel-plugin-named-asset-import',
                     'babel-preset-react-app',
                     'react-dev-utils',

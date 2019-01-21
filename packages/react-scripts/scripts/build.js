@@ -63,9 +63,15 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 // Process CLI arguments
 const argv = process.argv.slice(2);
 const writeStatsJson = argv.indexOf('--stats') !== -1;
+const rewriteEnv = argv.indexOf('--coverage') !== -1;
+
+if (rewriteEnv) {
+  process.env.BABEL_ENV = 'development';
+  process.env.NODE_ENV = 'development';
+}
 
 // Generate configuration
-const config = configFactory('production');
+const config = configFactory('development');
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
