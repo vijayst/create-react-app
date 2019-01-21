@@ -71,7 +71,7 @@ if (rewriteEnv) {
 }
 
 // Generate configuration
-const config = configFactory('development');
+const config = configFactory(rewriteEnv ? 'development' : 'production');
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
