@@ -388,7 +388,6 @@ module.exports = function(webpackEnv) {
                   : [
                       [
                         require.resolve('babel-plugin-named-asset-import'),
-                        require.resolve('babel-plugin-istanbul'),
                         {
                           loaderMap: {
                             svg: {
@@ -397,6 +396,7 @@ module.exports = function(webpackEnv) {
                           },
                         },
                       ],
+                      require.resolve('babel-plugin-istanbul'),
                     ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
